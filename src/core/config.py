@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from sqlalchemy import URL
 
 from pathlib import Path
 
@@ -15,7 +16,14 @@ class Settings:
     POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD")
     POSTGRES_HOST: str = os.getenv("POSTGRES_HOST")
     POSTGRES_DB: str = os.getenv("POSTGRES_DB")
-    POSTGRES_CONNECT_ARGS: str = os.getenv("POSTGRES_CONNECT_ARGS")
+    DATABASE_URL = URL.create(
+        "postgresql",
+        username=POSTGRES_USER,
+        password=POSTGRES_PASSWORD,
+        host=POSTGRES_HOST,
+        database=POSTGRES_DB,
+        query={"sslmode": "require"},
+    )
 
 
 settings = Settings()
